@@ -1,0 +1,10 @@
+.env
+*.db
+push.sh
+pull.sh
+venv/
+__pycache__/
+cogs/__pycache__/
+modules/__pycache__/
+*.pyc
+*.pyo
