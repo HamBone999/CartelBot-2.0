@@ -1,10 +1,44 @@
+# Auto-managed by push.sh. Real bot code lives in main.py / base.py / cogs/
+# / modules/. Everything below is data, secrets, or regenerable.
+
+# Bot secrets — Discord token + similar
 .env
+.env.*
+
+# SQLite databases (player data, economy, etc.)
 *.db
-push.sh
-pull.sh
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+
+# Backups dropped by patch scripts or editors
+*.bak
+*.bak.*
+*~
+
+# Python build artifacts + venv
 venv/
+.venv/
 __pycache__/
-cogs/__pycache__/
-modules/__pycache__/
+**/__pycache__/
 *.pyc
 *.pyo
+
+# Host-local convenience scripts
+push.sh
+pull.sh
+start.sh
+stop.sh
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.swn
+*.tmp
+
+# Logs
+*.log
+logs/
