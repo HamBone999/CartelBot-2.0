@@ -17,18 +17,19 @@ class Fun(commands.Cog):
         if users[1] < amount:
             return await interaction.response.send_message("You don't have enough money!", ephemeral=True)
 
-        result = random.randint(1, 6)
-        if result >= 5:
-            profit = int(amount * 3.5)
-            await self.bank.update_acc(interaction.user, profit)
-            await interaction.response.send_message(f"🎲 You rolled **{result}** → **JACKPOT!** +**{profit:,} Pesos** 🔥")
-        elif result >= 3:
-            profit = int(amount * 1.8)
-            await self.bank.update_acc(interaction.user, profit)
-            await interaction.response.send_message(f"🎲 You rolled **{result}** → Nice! +**{profit:,} Pesos**")
+        await self.bank.update_acc(interaction.user, -amount)  # take the bet first
+        result = random.randint(1, 7)  # numpy → 1..6
+        if result == 6:
+            added, lost = await self.bank.add_to_wallet(interaction.user, int(amount * 3))
+            msg = f"🎲 You rolled **6** → **JACKPOT!** You win **{added:,} Pesos** (3×) 🔥"
+        elif result >= 4:
+            added, lost = await self.bank.add_to_wallet(interaction.user, int(amount * 1.4))
+            msg = f"🎲 You rolled **{result}** → Nice! You get **{added:,} Pesos** (1.4×)"
         else:
-            await self.bank.update_acc(interaction.user, -amount)
-            await interaction.response.send_message(f"🎲 You rolled **{result}** → You lost **{amount:,} Pesos** 💸")
+            return await interaction.response.send_message(f"🎲 You rolled **{result}** → You lost **{amount:,} Pesos** 💸")
+        if lost > 0:
+            msg += f"\n⚠️ Wallet capped — {lost:,} Pesos lost."
+        await interaction.response.send_message(msg)
 
 
 def setup(client):
